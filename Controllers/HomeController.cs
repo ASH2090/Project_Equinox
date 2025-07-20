@@ -1,31 +1,20 @@
-using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
-using Project_Equinox.Models;
+ using Microsoft.AspNetCore.Mvc;
 
-namespace Project_Equinox.Controllers;
-
-public class HomeController : Controller
+namespace Equinox.Controllers
 {
-    private readonly ILogger<HomeController> _logger;
-
-    public HomeController(ILogger<HomeController> logger)
+    public class HomeController : Controller
     {
-        _logger = logger;
-    }
+        public IActionResult Index() => View();
 
-    public IActionResult Index()
-    {
-        return View();
-    }
+        public IActionResult Contact() =>
+            Content("Area: Main, Controller: Home, Action: Contact");
 
-    public IActionResult Privacy()
-    {
-        return View();
-    }
+        public IActionResult Privacy() => View();
 
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        public IActionResult Terms() =>
+            Content("Area: Main, Controller: Home, Action: Terms");
+
+        public IActionResult CookiePolicy() =>
+            Content("Area: Main, Controller: Home, Action: CookiePolicy");
     }
 }
