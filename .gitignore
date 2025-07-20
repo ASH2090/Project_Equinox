@@ -482,3 +482,11 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# .NET files in VS Code
+bin/
+obj/
+.vscode/
+*.user
+*.suo
+*.log
