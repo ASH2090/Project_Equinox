@@ -8,19 +8,19 @@
     "net9.0": []
   },
   "packageFolders": {
-    "C:\\Users\\pooja\\.nuget\\packages\\": {}
+    "/Users/vaishnavi/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\pooja\\Project_Equinox\\Project_Equinox.csproj",
+      "projectUniqueName": "/Users/vaishnavi/Project_Equinox/Project_Equinox.csproj",
       "projectName": "Project_Equinox",
-      "projectPath": "C:\\Users\\pooja\\Project_Equinox\\Project_Equinox.csproj",
-      "packagesPath": "C:\\Users\\pooja\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\pooja\\Project_Equinox\\obj\\",
+      "projectPath": "/Users/vaishnavi/Project_Equinox/Project_Equinox.csproj",
+      "packagesPath": "/Users/vaishnavi/.nuget/packages/",
+      "outputPath": "/Users/vaishnavi/Project_Equinox/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\pooja\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "/Users/vaishnavi/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
@@ -68,7 +68,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.301/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.301/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
