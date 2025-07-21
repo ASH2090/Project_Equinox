@@ -30,12 +30,12 @@ body {
   text-align: start;
 }
 .home-background {
-    min-height: 100vh;
+    min-height: 75vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-image: url('/images/background.jpg'); /* Change path as needed */
-    background-size: cover;
+    background-image: url('/images/background.jpg');
+    background-size: contain;
     background-repeat: no-repeat;
     background-position: center center;
 }
