@@ -8,19 +8,19 @@
     "net9.0": []
   },
   "packageFolders": {
-    "C:\\Users\\harsa\\.nuget\\packages\\": {}
+    "/Users/junzuo/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\harsa\\OneDrive\\Project_Equinox\\Project_Equinox.csproj",
+      "projectUniqueName": "/Users/junzuo/Documents/June2/Project_Equinox/Project_Equinox.csproj",
       "projectName": "Project_Equinox",
-      "projectPath": "C:\\Users\\harsa\\OneDrive\\Project_Equinox\\Project_Equinox.csproj",
-      "packagesPath": "C:\\Users\\harsa\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\harsa\\OneDrive\\Project_Equinox\\obj\\",
+      "projectPath": "/Users/junzuo/Documents/June2/Project_Equinox/Project_Equinox.csproj",
+      "packagesPath": "/Users/junzuo/.nuget/packages/",
+      "outputPath": "/Users/junzuo/Documents/June2/Project_Equinox/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\harsa\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "/Users/junzuo/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
@@ -44,7 +44,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.300"
+      "SdkAnalysisLevel": "9.0.200"
     },
     "frameworks": {
       "net9.0": {
@@ -68,7 +68,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.301/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.203/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
