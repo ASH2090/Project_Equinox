@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\pooja\\OneDrive\\Documents\\Project_Equinox\\Project_Equinox.csproj": {}
+    "C:\\Users\\harsa\\OneDrive\\Project_Equinox\\Project_Equinox.csproj": {}
   },
   "projects": {
-    "C:\\Users\\pooja\\OneDrive\\Documents\\Project_Equinox\\Project_Equinox.csproj": {
+    "C:\\Users\\harsa\\OneDrive\\Project_Equinox\\Project_Equinox.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\pooja\\OneDrive\\Documents\\Project_Equinox\\Project_Equinox.csproj",
+        "projectUniqueName": "C:\\Users\\harsa\\OneDrive\\Project_Equinox\\Project_Equinox.csproj",
         "projectName": "Project_Equinox",
-        "projectPath": "C:\\Users\\pooja\\OneDrive\\Documents\\Project_Equinox\\Project_Equinox.csproj",
-        "packagesPath": "C:\\Users\\pooja\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\pooja\\OneDrive\\Documents\\Project_Equinox\\obj\\",
+        "projectPath": "C:\\Users\\harsa\\OneDrive\\Project_Equinox\\Project_Equinox.csproj",
+        "packagesPath": "C:\\Users\\harsa\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\harsa\\OneDrive\\Project_Equinox\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\pooja\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\harsa\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
