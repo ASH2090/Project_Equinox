@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace Equinox.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Route("Admin/[controller]/[action]")]
     public class HomeController : Controller
     {
-        //The requirement for routing in Admin area is to use Attribute Routing
-        //So we need to decorate the action method with [Route] attribute
+        [HttpGet]
         public IActionResult Index() => View();
     }
 }

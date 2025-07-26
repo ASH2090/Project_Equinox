@@ -20,15 +20,9 @@ app.UseAuthorization();
 
 app.MapStaticAssets();
 
-//How below route definition differs from what we've learned in the class? Do you understand how it works?
-app.MapControllerRoute(
-    name: "areas",
-    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}" 
-);
- 
+
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets(); //this method is not needed. Know why?
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
