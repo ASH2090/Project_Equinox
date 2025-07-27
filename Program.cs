@@ -3,9 +3,14 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add session services
+builder.Services.AddMemoryCache();
+builder.Services.AddSession();
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-// Add services to the container.
+
+// EF Core DI.
 builder.Services.AddDbContext<EquinoxContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("EquinoxContext")));
 
@@ -20,11 +25,10 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 app.UseRouting();
-
+app.UseSession();
 app.UseAuthorization();
-
-app.MapStaticAssets();
 
 
 app.MapControllerRoute(
