@@ -1,7 +1,13 @@
+using Project_Equinox.Models;
+using Microsoft.EntityFrameworkCore;                    
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+// Add services to the container.
+builder.Services.AddDbContext<EquinoxContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("EquinoxContext")));
 
 var app = builder.Build();
 
