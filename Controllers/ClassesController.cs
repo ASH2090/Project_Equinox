@@ -44,7 +44,7 @@ namespace Project_Equinox.Controllers
             vm.Categories = _context.ClassCategories.ToList();
 
             // Get booked class IDs for display purposes
-            vm.BookClassIds = CookieHelper.GetBookedClassIds(Request);
+            vm.BookedClassIds = CookieHelper.GetBookedClassIds(Request);
 
             return View(vm);
         }
