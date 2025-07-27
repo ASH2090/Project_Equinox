@@ -10,10 +10,10 @@ namespace Project_Equinox.Models
         public List<Club> Clubs { get; set; } = new List<Club>();
         public List<ClassCategory> Categories { get; set; } = new List<ClassCategory>();
         public List<EquinoxClass> Classes { get; set; } = new List<EquinoxClass>();
-        public List<int> BookClassIds { get; set; } = new List<int>();
+        public List<int> BookedClassIds { get; set; } = new List<int>();
         public Boolean IsClassBooked(int classId)
         {
-            return BookClassIds?.Contains(classId) ?? false;
+            return BookedClassIds?.Contains(classId) ?? false;
         }
         public class ClassDetailViewModel
         {

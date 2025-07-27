@@ -47,7 +47,7 @@ namespace Project_Equinox.Models
                 {
                     EquinoxClassId = 1,
                     Name = "Boxing 101",
-                    ClassPicture = "boxing101.jpg",
+                    ClassPicture = "wwwroot/css/images/boxing101.jpg",
                     ClassDay = "Monday",
                     Time = "8 AM – 9 AM",
                     ClassCategoryId = 1,
@@ -58,7 +58,7 @@ namespace Project_Equinox.Models
                 {
                     EquinoxClassId = 2,
                     Name = "Yoga Flow",
-                    ClassPicture = "yogaflow.jpg",
+                    ClassPicture = "wwwroot/css/images/yogaflow.jpg",
                     ClassDay = "Tuesday",
                     Time = "6 PM – 7 PM",
                     ClassCategoryId = 2,
@@ -69,7 +69,7 @@ namespace Project_Equinox.Models
                 {
                     EquinoxClassId = 3,
                     Name = "HIIT Blast",
-                    ClassPicture = "hiitblast.jpg",
+                    ClassPicture = "wwwroot/css/images/hiitblast.jpg",
                     ClassDay = "Wednesday",
                     Time = "5 PM – 6 PM",
                     ClassCategoryId = 3,
@@ -80,7 +80,7 @@ namespace Project_Equinox.Models
                 {
                     EquinoxClassId = 4,
                     Name = "Strength Training",
-                    ClassPicture = "strengthtraining.jpg",
+                    ClassPicture = "wwwroot/css/images/strengthtraining.jpg",
                     ClassDay = "Thursday",
                     Time = "7 AM – 8 AM",
                     ClassCategoryId = 4,
@@ -91,7 +91,7 @@ namespace Project_Equinox.Models
                 {
                     EquinoxClassId = 5,
                     Name = "Barre Basics",
-                    ClassPicture = "barrebasic.jpg",
+                    ClassPicture = "wwwroot/css/images/barrebasic.jpg",
                     ClassDay = "Friday",
                     Time = "9 AM – 10 AM",
                     ClassCategoryId = 5,
