@@ -1,4 +1,3 @@
-
 @model Project_Equinox.Models.ClassFilterViewModel
 
 @{
@@ -108,7 +107,7 @@
                                 </p>
                                 
                                 <div class="mt-auto pt-2">
-                                    @if (Model.BookedClassIds.Contains(equinoxClass.EquinoxClassId))
+                                    @if (Model.IsClassBooked(equinoxClass.EquinoxClassId))
                                     {
                                         <span class="badge bg-success me-2">
                                             <i class="fas fa-check me-1"></i>Booked
@@ -120,7 +119,7 @@
                                            class="btn btn-outline-primary">
                                             <i class="fas fa-info-circle me-1"></i>Details
                                         </a>
-                                        @if (!Model.BookedClassIds.Contains(equinoxClass.EquinoxClassId))
+                                        @if (!Model.IsClassBooked(equinoxClass.EquinoxClassId))
                                         {
                                             <a asp-action="Book" asp-route-id="@equinoxClass.EquinoxClassId" 
                                                class="btn btn-primary">
