@@ -30,20 +30,6 @@ app.UseRouting();
 app.UseSession();
 app.UseAuthorization();
 
-// Temporary database initialization endpoint for Azure
-app.MapGet("/InitDatabase", async (EquinoxContext context) =>
-{
-    try
-    {
-        await context.Database.EnsureCreatedAsync();
-        return "Database initialized successfully!";
-    }
-    catch (Exception ex)
-    {
-        return $"Error: {ex.Message}";
-    }
-});
-
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
