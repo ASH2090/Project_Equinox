@@ -154,7 +154,7 @@ namespace Project_Equinox.Controllers
             try
             {
                 _context.Database.EnsureCreated();
-                return Content("Database initialized successfully! You can now use the application.");
+                return Content("Database initialized successfully! Now try /GymClass");
             }
             catch (Exception ex)
             {
