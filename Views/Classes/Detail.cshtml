@@ -4,92 +4,85 @@
     ViewData["Title"] = Model.Name;
 }
 
-<div class="container py-5">
-    <div class="row">
-        <div class="col-lg-8 mx-auto">
-            <div class="card shadow-lg detail-card">
-                @if (!string.IsNullOrEmpty(Model.ClassPicture))
+<div class="detail-container">
+    <div class="detail-card">
+        @if (!string.IsNullOrEmpty(Model.ClassPicture))
+        {
+            <img src="@Model.ClassPicture" class="detail-image" alt="@Model.Name">
+        }
+        else
+        {
+            <div class="detail-image-placeholder">
+                <i class="fas fa-dumbbell fa-3x text-muted"></i>
+            </div>
+        }
+        
+        <div class="detail-header">
+            <h1 class="detail-title">@Model.Name</h1>
+        </div>
+        
+        <div class="detail-body">
+            <div class="detail-info-row">
+                <div class="detail-info-item">
+                    <div class="detail-info-label"><i class="fas fa-map-marker-alt me-1"></i>Location</div>
+                    <p class="detail-info-value">@Model.Club?.Name</p>
+                </div>
+                <div class="detail-info-item">
+                    <div class="detail-info-label"><i class="fas fa-tag me-1"></i>Category</div>
+                    <p class="detail-info-value">@Model.ClassCategory?.Name</p>
+                </div>
+            </div>
+            
+            <div class="detail-info-row">
+                <div class="detail-info-item">
+                    <div class="detail-info-label"><i class="fas fa-calendar me-1"></i>Schedule</div>
+                    <p class="detail-info-value">@Model.ClassDay</p>
+                </div>
+                <div class="detail-info-item">
+                    <div class="detail-info-label"><i class="fas fa-clock me-1"></i>Time</div>
+                    <p class="detail-info-value">@Model.Time</p>
+                </div>
+            </div>
+            
+            @if (Model.Coach != null)
+            {
+                <div class="detail-info-row">
+                    <div class="detail-info-item">
+                        <div class="detail-info-label"><i class="fas fa-user me-1"></i>Coach</div>
+                        <p class="detail-info-value">@Model.Coach.Name</p>
+                    </div>
+                </div>
+            }
+
+            @if (TempData["Message"] != null)
+            {
+                <div class="alert-clean">
+                    @TempData["Message"]
+                </div>
+            }
+        </div>
+        
+        <div class="detail-footer">
+            <a asp-action="Index" class="btn-clean">
+                <i class="fas fa-arrow-left me-1"></i>Back to Classes
+            </a>
+            
+            <div>
+                @if (ViewBag.IsBooked == true)
                 {
-                    <img src="@Model.ClassPicture" class="card-img-top class-img-detail" alt="@Model.Name">
+                    <span class="status-badge">
+                        <i class="fas fa-check me-1"></i>Already Booked
+                    </span>
+                    <a asp-action="MyBookings" class="btn-clean">
+                        <i class="fas fa-list me-1"></i>My Bookings
+                    </a>
                 }
                 else
                 {
-                    <div class="card-img-top d-flex align-items-center justify-content-center bg-light class-img-placeholder-detail">
-                        <i class="fas fa-dumbbell fa-5x text-muted"></i>
-                    </div>
+                    <a asp-action="Book" asp-route-id="@Model.EquinoxClassId" class="btn-clean btn-primary-clean">
+                        <i class="fas fa-plus me-1"></i>Book This Class
+                    </a>
                 }
-                
-                <div class="card-header bg-primary text-white">
-                    <h1 class="card-title mb-0">@Model.Name</h1>
-                </div>
-                
-                <div class="card-body">
-                    <div class="row mb-4">
-                        <div class="col-md-6">
-                            <h5><i class="fas fa-map-marker-alt text-primary me-2"></i>Location</h5>
-                            <p class="text-muted">@Model.Club?.Name</p>
-                        </div>
-                        <div class="col-md-6">
-                            <h5><i class="fas fa-tag text-success me-2"></i>Category</h5>
-                            <p class="text-muted">@Model.ClassCategory?.Name</p>
-                        </div>
-                    </div>
-                    
-                    <div class="row mb-4">
-                        <div class="col-md-6">
-                            <h5><i class="fas fa-calendar text-info me-2"></i>Schedule</h5>
-                            <p class="text-muted">@Model.ClassDay</p>
-                        </div>
-                        <div class="col-md-6">
-                            <h5><i class="fas fa-clock text-warning me-2"></i>Time</h5>
-                            <p class="text-muted">@Model.Time</p>
-                        </div>
-                    </div>
-                    
-                    @if (Model.Coach != null)
-                    {
-                        <div class="row mb-4">
-                            <div class="col-12">
-                                <h5><i class="fas fa-user text-secondary me-2"></i>Coach</h5>
-                                <p class="text-muted">@Model.Coach.Name</p>
-                            </div>
-                        </div>
-                    }
-
-                    @if (TempData["Message"] != null)
-                    {
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            @TempData["Message"]
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
-                    }
-                </div>
-                
-                <div class="card-footer bg-light">
-                    <div class="d-flex gap-2 justify-content-between align-items-center">
-                        <a asp-action="Index" class="btn btn-outline-secondary">
-                            <i class="fas fa-arrow-left me-1"></i>Back to Classes
-                        </a>
-                        
-                        <div>
-                            @if (ViewBag.IsBooked == true)
-                            {
-                                <span class="badge bg-success fs-6 me-2 detail-badge">
-                                    <i class="fas fa-check me-1"></i>Already Booked
-                                </span>
-                                <a asp-action="MyBookings" class="btn btn-info">
-                                    <i class="fas fa-list me-1"></i>My Bookings
-                                </a>
-                            }
-                            else
-                            {
-                                <a asp-action="Book" asp-route-id="@Model.EquinoxClassId" class="btn btn-primary btn-lg">
-                                    <i class="fas fa-plus me-1"></i>Book This Class
-                                </a>
-                            }
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

@@ -18,16 +18,23 @@ namespace Project_Equinox.Controllers
             // Get session values if filters not set in request
             if (vm.ClubId == 0 && vm.CategoryId == 0)
             {
-                vm = HttpContext.Session.GetFilterValues();
+                var sessionVm = HttpContext.Session.GetFilterValues();
+                vm.ClubId = sessionVm.ClubId;
+                vm.CategoryId = sessionVm.CategoryId;
             }
 
             // Store current filter values in session
             HttpContext.Session.SetFilterValues(vm);
 
+            // Get all clubs and categories for dropdowns FIRST
+            vm.Clubs = _context.Clubs.ToList();
+            vm.Categories = _context.ClassCategories.ToList();
+
             // Build query with filters
             var query = _context.Equinoxclasses
                 .Include(c => c.Club)
                 .Include(c => c.ClassCategory)
+                .Include(c => c.Coach)
                 .AsQueryable();
 
             if (vm.ClubId != 0)
@@ -38,10 +45,6 @@ namespace Project_Equinox.Controllers
 
             // Get filtered classes
             vm.Classes = query.ToList();
-
-            // Get all clubs and categories for dropdowns
-            vm.Clubs = _context.Clubs.ToList();
-            vm.Categories = _context.ClassCategories.ToList();
 
             // Get booked class IDs for display purposes
             vm.BookedClassIds = CookieHelper.GetBookedClassIds(Request);
