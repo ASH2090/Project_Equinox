@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = Model.Name;
+    Layout = "_Layout";
 }
 
 <div class="detail-container">
@@ -71,7 +72,7 @@
                 @if (ViewBag.IsBooked == true)
                 {
                     <span class="status-badge">
-                        <i class="fas fa-check me-1"></i>Already Booked
+                        <i class="fas fa-check me-1"></i>Class Already Booked
                     </span>
                     <a asp-action="MyBookings" class="btn-clean">
                         <i class="fas fa-list me-1"></i>My Bookings

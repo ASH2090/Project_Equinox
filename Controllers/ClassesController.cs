@@ -7,6 +7,12 @@ namespace Project_Equinox.Controllers
     public class ClassesController : Controller
     {
         private readonly EquinoxContext _context;
+        
+        // Constants to avoid duplicate message strings
+        private const string BookingSuccessMessage = "Class booked successfully!";
+        private const string BookingExistsMessage = "Class is already booked.";
+        private const string CancelSuccessMessage = "Booking canceled successfully!";
+        private const string BookingNotFoundMessage = "Booking not found.";
 
         public ClassesController(EquinoxContext context)
         {
@@ -52,12 +58,23 @@ namespace Project_Equinox.Controllers
             return View(vm);
         }
 
+        public IActionResult Clear()
+        {
+            // Clear session filter values
+            HttpContext.Session.ClearFilterValues();
+            
+            // Redirect to index with no parameters to show all classes
+            return RedirectToAction("Index");
+        }
+
         public IActionResult Detail(int id)
         {
-            var equinoxClass = _context.Equinoxclasses
+            // Reuse same Include pattern to avoid duplication
+            var query = _context.Equinoxclasses
                 .Include(c => c.Club)
-                .Include(c => c.ClassCategory)
-                .FirstOrDefault(c => c.EquinoxClassId == id);
+                .Include(c => c.ClassCategory);
+                
+            var equinoxClass = query.FirstOrDefault(c => c.EquinoxClassId == id);
 
             if (equinoxClass == null)
             {
@@ -80,25 +97,30 @@ namespace Project_Equinox.Controllers
             if (!bookedIds.Contains(id))
             {
                 bookedIds.Add(id);
-                TempData["Message"] = "Class booked successfully!";
+                TempData["Message"] = BookingSuccessMessage;
             }
             else
             {
-                TempData["Message"] = "Class is already booked.";
+                TempData["Message"] = BookingExistsMessage;
             }
 
             // Save updated list back to cookie
             CookieHelper.SetBookedClassIds(Response, bookedIds);
 
-            return RedirectToAction("MyBookings");
+            // PRG Pattern: Redirect to Filter page as per requirements
+            return RedirectToAction("Index");
         }
 
         public IActionResult MyBookings()
         {
             var bookedIds = CookieHelper.GetBookedClassIds(Request);
-            var bookedClasses = _context.Equinoxclasses
+            
+            // Reuse same Include pattern as Index method to avoid duplication
+            var query = _context.Equinoxclasses
                 .Include(c => c.Club)
-                .Include(c => c.ClassCategory)
+                .Include(c => c.ClassCategory);
+                
+            var bookedClasses = query
                 .Where(c => bookedIds.Contains(c.EquinoxClassId))
                 .ToList();
             
@@ -113,11 +135,11 @@ namespace Project_Equinox.Controllers
             {
                 bookedIds.Remove(id);
                 CookieHelper.SetBookedClassIds(Response, bookedIds);
-                TempData["Message"] = "Booking canceled successfully!";
+                TempData["Message"] = CancelSuccessMessage;
             }
             else
             {
-                TempData["Message"] = "Booking not found.";
+                TempData["Message"] = BookingNotFoundMessage;
             }
             
             return RedirectToAction("MyBookings");
