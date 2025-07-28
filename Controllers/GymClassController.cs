@@ -154,11 +154,14 @@ namespace Project_Equinox.Controllers
             try
             {
                 _context.Database.EnsureCreated();
-                return Content("Database initialized successfully! Now try /GymClass");
+                return Content("✅ Database initialized successfully! Now try /GymClass<br/><br/>" +
+                              "Database location: " + _context.Database.GetConnectionString() + "<br/><br/>" +
+                              "<a href='/GymClass'>Go to Classes</a>");
             }
             catch (Exception ex)
             {
-                return Content($"Database initialization failed: {ex.Message}");
+                return Content($"❌ Database initialization failed: {ex.Message}<br/><br/>" +
+                              $"Connection String: {_context.Database.GetConnectionString()}");
             }
         }
     }
