@@ -147,5 +147,19 @@ namespace Project_Equinox.Controllers
 
             return RedirectToAction("MyBookings");
         }
+
+        // Temporary endpoint to initialize database on Azure
+        public IActionResult InitDatabase()
+        {
+            try
+            {
+                _context.Database.EnsureCreated();
+                return Content("Database initialized successfully! You can now use the application.");
+            }
+            catch (Exception ex)
+            {
+                return Content($"Database initialization failed: {ex.Message}");
+            }
+        }
     }
 }
