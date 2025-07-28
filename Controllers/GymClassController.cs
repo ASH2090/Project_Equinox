@@ -4,7 +4,7 @@ using Project_Equinox.Models;
 
 namespace Project_Equinox.Controllers
 {
-    public class ClassesController : Controller
+    public class GymClassController : Controller
     {
         private readonly EquinoxContext _context;
 
@@ -14,7 +14,7 @@ namespace Project_Equinox.Controllers
         private const string CancelSuccessMessage = "Booking canceled successfully!";
         private const string BookingNotFoundMessage = "Booking not found.";
 
-        public ClassesController(EquinoxContext context)
+        public GymClassController(EquinoxContext context)
         {
             _context = context;
         }
@@ -62,7 +62,7 @@ namespace Project_Equinox.Controllers
             catch (Exception ex)
             {
                 return Content(
-                    $"<h2>🔥 Error in ClassesController.Index()</h2>" +
+                    $"<h2>🔥 Error in GymClassController.Index()</h2>" +
                     $"<strong>Message:</strong> {ex.Message}<br/><br/>" +
                     $"<strong>StackTrace:</strong><pre>{ex.StackTrace}</pre>" +
                     $"<br/><strong>Inner Exception:</strong> {ex.InnerException?.Message ?? "None"}",
