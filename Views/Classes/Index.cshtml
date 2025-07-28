@@ -4,8 +4,6 @@
     ViewData["Title"] = "Equinox Classes";
 }
 
-</main>
-
 <div class="hero-section mb-4">
     <div class="hero-content text-center">
         <h1 class="display-4 fw-bold text-white mb-3">Find Your Perfect Class</h1>
@@ -30,9 +28,12 @@
                             <label for="ClubId" class="form-label">Club Location</label>
                             <select asp-for="ClubId" class="form-select">
                                 <option value="0">All Clubs</option>
-                                @foreach (var club in Model.Clubs)
+                                @if (Model.Clubs != null)
                                 {
-                                    <option value="@club.ClubId">@club.Name</option>
+                                    @foreach (var club in Model.Clubs)
+                                    {
+                                        <option value="@club.ClubId">@club.Name</option>
+                                    }
                                 }
                             </select>
                         </div>
@@ -40,9 +41,12 @@
                             <label for="CategoryId" class="form-label">Class Category</label>
                             <select asp-for="CategoryId" class="form-select">
                                 <option value="0">All Categories</option>
-                                @foreach (var category in Model.Categories)
+                                @if (Model.Categories != null)
                                 {
-                                    <option value="@category.ClassCategoryId">@category.Name</option>
+                                    @foreach (var category in Model.Categories)
+                                    {
+                                        <option value="@category.ClassCategoryId">@category.Name</option>
+                                    }
                                 }
                             </select>
                         </div>
@@ -146,3 +150,5 @@
         </div>
     }
 </div>
+
+</main>
