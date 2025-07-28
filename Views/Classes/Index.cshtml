@@ -2,147 +2,147 @@
 
 @{
     ViewData["Title"] = "Equinox Classes";
+    Layout = "_Layout";
 }
 
-</main>
-
-<div class="hero-section mb-4">
-    <div class="hero-content text-center">
-        <h1 class="display-4 fw-bold text-white mb-3">Find Your Perfect Class</h1>
-        <p class="lead text-white mb-4">Filter by club and category to discover classes that match your fitness goals</p>
+<div class="main-container">
+   
+    <div class="hero-header">
+        <h1 class="hero-title">Find Your Perfect Class</h1>
+        <p class="hero-subtitle">Discover amazing fitness classes tailored to your goals and schedule</p>
     </div>
-</div>
 
-<main class="container mt-4">
-
-<!-- Filter Section -->
-<div class="row justify-content-center mb-4">
-    <div class="col-lg-6 col-xl-5">
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <h5 class="card-title mb-3 text-center">
-                    <i class="fas fa-filter me-2"></i>Filter Classes
-                </h5>
-                
-                <form method="get" asp-action="Index">
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label for="ClubId" class="form-label">Club Location</label>
-                            <select asp-for="ClubId" class="form-select">
-                                <option value="0">All Clubs</option>
+    <div class="filter-section">
+        <h2 class="filter-title">Filter Classes</h2>
+        
+        <form method="get" asp-action="Index">
+            <div class="row g-4">
+                <!-- Club Filter -->
+                <div class="col-md-6">
+                    <div class="filter-group">
+                        <label for="ClubId" class="filter-label">
+                            <i class="fas fa-building me-2"></i>Select Club
+                        </label>
+                        <select asp-for="ClubId" class="form-select form-select-custom">
+                            <option value="0">All Clubs</option>
+                            @if (Model.Clubs != null)
+                            {
                                 @foreach (var club in Model.Clubs)
                                 {
                                     <option value="@club.ClubId">@club.Name</option>
                                 }
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="CategoryId" class="form-label">Class Category</label>
-                            <select asp-for="CategoryId" class="form-select">
-                                <option value="0">All Categories</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Category Filter -->
+                <div class="col-md-6">
+                    <div class="filter-group">
+                        <label for="CategoryId" class="filter-label">
+                            <i class="fas fa-tags me-2"></i>Select Category
+                        </label>
+                        <select asp-for="CategoryId" class="form-select form-select-custom">
+                            <option value="0">All Categories</option>
+                            @if (Model.Categories != null)
+                            {
                                 @foreach (var category in Model.Categories)
                                 {
                                     <option value="@category.ClassCategoryId">@category.Name</option>
                                 }
-                            </select>
-                        </div>
-                        <div class="col-12 text-center mt-3">
-                            <button type="submit" class="btn btn-primary me-2">
-                                <i class="fas fa-search me-1"></i>Filter
-                            </button>
-                            <a asp-action="Index" class="btn btn-outline-secondary">
-                                <i class="fas fa-times me-1"></i>Clear
-                            </a>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Results Count -->
-<div class="row justify-content-center mb-3">
-    <div class="col-lg-6 col-xl-5 text-center">
-        <h4 class="mb-0">
-            @Model.Classes.Count() class(es) found
-            @if (Model.ClubId != 0 || Model.CategoryId != 0)
-            {
-                <small class="text-muted">(filtered)</small>
-            }
-        </h4>
-    </div>
-</div>
-
-<!-- Classes Grid -->
-<div class="row justify-content-center">
-    @if (Model.Classes.Any())
-    {
-        @foreach (var equinoxClass in Model.Classes)
-        {
-            <div class="col-lg-4 col-md-6 col-xl-3 mb-4">
-                <div class="card h-100 shadow-sm class-card">
-                    @if (!string.IsNullOrEmpty(equinoxClass.ClassPicture))
-                    {
-                        <img src="@equinoxClass.ClassPicture" class="card-img-top class-img-index" alt="@equinoxClass.Name">
-                    }
-                    else
-                    {
-                        <div class="card-img-top d-flex align-items-center justify-content-center bg-light class-img-placeholder-index">
-                            <i class="fas fa-dumbbell fa-3x text-muted"></i>
-                        </div>
-                    }
-                    
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title">@equinoxClass.Name</h5>
-                        <p class="card-text">
-                            <i class="fas fa-map-marker-alt text-primary me-1"></i>
-                            @equinoxClass.Club?.Name
-                        </p>
-                        <p class="card-text">
-                            <i class="fas fa-tag text-success me-1"></i>
-                            @equinoxClass.ClassCategory?.Name
-                        </p>
-                        <p class="card-text">
-                            <i class="fas fa-calendar text-info me-1"></i>
-                            @equinoxClass.ClassDay at @equinoxClass.Time
-                        </p>
-                        
-                        <div class="mt-auto pt-2">
-                            @if (Model.IsClassBooked(equinoxClass.EquinoxClassId))
-                            {
-                                <span class="badge bg-success me-2">
-                                    <i class="fas fa-check me-1"></i>Booked
-                                </span>
                             }
-                            
-                            <div class="btn-group w-100" role="group">
-                                <a asp-action="Detail" asp-route-id="@equinoxClass.EquinoxClassId" 
-                                   class="btn btn-outline-primary">
-                                    <i class="fas fa-info-circle me-1"></i>Details
-                                </a>
-                                @if (!Model.IsClassBooked(equinoxClass.EquinoxClassId))
-                                {
-                                    <a asp-action="Book" asp-route-id="@equinoxClass.EquinoxClassId" 
-                                       class="btn btn-primary">
-                                        <i class="fas fa-plus me-1"></i>Book
-                                    </a>
-                                }
-                            </div>
-                        </div>
+                        </select>
                     </div>
                 </div>
             </div>
-        }
-    }
-    else
-    {
-        <div class="col-12">
-            <div class="alert alert-info text-center py-5">
-                <i class="fas fa-search fa-3x mb-3"></i>
-                <h4>No classes found</h4>
-                <p class="mb-0">Try adjusting your filters to see more classes.</p>
+            
+            <!-- Action Buttons -->
+            <div class="row g-3 mt-4">
+                <div class="col-sm-6">
+                    <button type="submit" class="btn btn-filter w-100">
+                        <i class="fas fa-search me-2"></i>Apply Filters
+                    </button>
+                </div>
+                <div class="col-sm-6">
+                    <a asp-action="Clear" class="btn btn-outline-secondary w-100">
+                        <i class="fas fa-times me-2"></i>Clear Filters
+                    </a>
+                </div>
             </div>
+        </form>
+    </div>
+
+    <div class="cards-grid">
+        @foreach (var equinoxClass in Model.Classes)
+        {
+            <div class="class-card">
+                <a asp-action="Detail" asp-route-id="@equinoxClass.EquinoxClassId" class="text-decoration-none text-dark">
+                    
+                    <!-- Class Image -->
+                    @if (!string.IsNullOrEmpty(equinoxClass.ClassPicture))
+                    {
+                        <img src="@equinoxClass.ClassPicture" class="class-image" alt="@equinoxClass.Name" />
+                    }
+                    else
+                    {
+                        <div class="class-image-placeholder">
+                            <i class="fas fa-dumbbell"></i>
+                        </div>
+                    }
+                    
+                    <!-- Card Content -->
+                    <div class="card-content">
+                        <h3 class="class-title">@equinoxClass.Name</h3>
+                        
+                        <div class="class-details">
+                            <!-- Coach Info -->
+                            <div class="class-detail">
+                                <i class="fas fa-user-tie"></i>
+                                <strong>Coach:</strong>
+                                <span>@(equinoxClass.Coach?.Name ?? "TBA")</span>
+                            </div>
+                            
+                            <!-- Club Location -->
+                            <div class="class-detail">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <strong>Club:</strong>
+                                <span>@equinoxClass.Club?.Name</span>
+                            </div>
+                            
+                            <!-- Category -->
+                            <div class="class-detail">
+                                <i class="fas fa-tags"></i>
+                                <strong>Category:</strong>
+                                <span>@equinoxClass.ClassCategory?.Name</span>
+                            </div>
+                            
+                            <!-- Schedule Info -->
+                            <div class="schedule-row">
+                                <div class="schedule-item">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    <strong>Day</strong>
+                                    <span>@equinoxClass.ClassDay</span>
+                                </div>
+                                <div class="schedule-item">
+                                    <i class="fas fa-clock"></i>
+                                    <strong>Time</strong>
+                                    <span>@equinoxClass.Time</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+    
+    <!-- No Classes Found Message -->
+    @if (!Model.Classes.Any())
+    {
+        <div class="no-classes">
+            <i class="fas fa-search fa-5x"></i>
+            <h3>No classes found</h3>
+            <p>Try adjusting your filters to discover more amazing classes!</p>
         </div>
     }
 </div>
