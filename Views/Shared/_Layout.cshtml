@@ -3,13 +3,73 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"]  Equinox</title>
+    <title>@ViewData["Title"] - Equinox</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
 <body>
-    @RenderBody()
+    @{
+        // Use ViewBag.BookingCount for the booking badge, fallback to cookie if not set
+        var bookedCount = ViewBag.BookingCount;
+        if (bookedCount == null || bookedCount == 0)
+        {
+            bookedCount = 0;
+            var cookie = Context.Request.Cookies["BookedClassIds"];
+            if (!string.IsNullOrEmpty(cookie) && cookie != "[]")
+            {
+                try
+                {
+                    var bookedIds = System.Text.Json.JsonSerializer.Deserialize<List<int>>(cookie);
+                    bookedCount = bookedIds?.Count ?? 0;
+                }
+                catch { bookedCount = 0; }
+            }
+        }
+    }
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+        <div class="container">
+            <a class="navbar-brand" asp-controller="Home" asp-action="Index">Equinox</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Classes" asp-action="Index">Classes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-light position-relative ms-2" asp-controller="Classes" asp-action="MyBookings">
+                            <i class="fa fa-shopping-cart"></i>
+                            @if (bookedCount > 0)
+                            {
+                                <span class="badge bg-danger position-absolute top-0 start-100 translate-middle">
+                                    @bookedCount
+                                </span>
+                            }
+                            My Bookings
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-success text-center">
+            @TempData["Message"]
+        </div>
+    }
+
+    <div class="container">
+        @RenderBody()
+    </div>
 
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
