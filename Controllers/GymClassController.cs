@@ -21,30 +21,16 @@ namespace Project_Equinox.Controllers
 
         public IActionResult Index(ClassFilterViewModel vm)
         {
-            // If no filters provided in the request, clear the session
-            bool noFiltersProvided = Request.Query.Count == 0 || 
-                                   (!Request.Query.ContainsKey("ClubId") && !Request.Query.ContainsKey("CategoryId"));
-            
-            if (noFiltersProvided)
+            // Get session values if filters not set in request
+            if (vm.ClubId == 0 && vm.CategoryId == 0)
             {
-                // Clear session when no filters are provided (e.g., Clear button clicked)
-                HttpContext.Session.ClearFilterValues();
-                vm.ClubId = 0;
-                vm.CategoryId = 0;
+                var sessionVm = HttpContext.Session.GetFilterValues();
+                vm.ClubId = sessionVm.ClubId;
+                vm.CategoryId = sessionVm.CategoryId;
             }
-            else
-            {
-                // Get session values if filters not set in request
-                if (vm.ClubId == 0 && vm.CategoryId == 0)
-                {
-                    var sessionVm = HttpContext.Session.GetFilterValues();
-                    vm.ClubId = sessionVm.ClubId;
-                    vm.CategoryId = sessionVm.CategoryId;
-                }
-                
-                // Store current filter values in session
-                HttpContext.Session.SetFilterValues(vm);
-            }
+
+            // Store current filter values in session
+            HttpContext.Session.SetFilterValues(vm);
 
             // Get all clubs and categories for dropdowns
             vm.Clubs = _context.Clubs.ToList();
