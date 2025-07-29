@@ -1,11 +1,8 @@
 using Microsoft.AspNetCore.Http;
 using System.Text.Json;
-using Project_Equinox.Models;
-
 
 namespace Project_Equinox.Models
 {
- 
     public static class SessionExtensions
     {
         // Session keys

@@ -21,54 +21,41 @@ namespace Project_Equinox.Controllers
 
         public IActionResult Index(ClassFilterViewModel vm)
         {
-            try
+            // Get session values if filters not set in request
+            if (vm.ClubId == 0 && vm.CategoryId == 0)
             {
-                // Get session values if filters not set in request
-                if (vm.ClubId == 0 && vm.CategoryId == 0)
-                {
-                    var sessionVm = HttpContext.Session.GetFilterValues();
-                    vm.ClubId = sessionVm.ClubId;
-                    vm.CategoryId = sessionVm.CategoryId;
-                }
-
-                // Store current filter values in session
-                HttpContext.Session.SetFilterValues(vm);
-
-                // Get all clubs and categories for dropdowns FIRST
-                vm.Clubs = _context.Clubs.ToList();
-                vm.Categories = _context.ClassCategories.ToList();
-
-                // Build query with filters
-                var query = _context.Equinoxclasses
-                    .Include(c => c.Club)
-                    .Include(c => c.ClassCategory)
-                    .Include(c => c.Coach)
-                    .AsQueryable();
-
-                if (vm.ClubId != 0)
-                    query = query.Where(c => c.ClubId == vm.ClubId);
-
-                if (vm.CategoryId != 0)
-                    query = query.Where(c => c.ClassCategoryId == vm.CategoryId);
-
-                // Get filtered classes
-                vm.Classes = query.ToList();
-
-                // Get booked class IDs for display purposes
-                vm.BookedClassIds = CookieHelper.GetBookedClassIds(Request);
-
-                return View(vm);
+                var sessionVm = HttpContext.Session.GetFilterValues();
+                vm.ClubId = sessionVm.ClubId;
+                vm.CategoryId = sessionVm.CategoryId;
             }
-            catch (Exception ex)
-            {
-                return Content(
-                    $"<h2>🔥 Error in GymClassController.Index()</h2>" +
-                    $"<strong>Message:</strong> {ex.Message}<br/><br/>" +
-                    $"<strong>StackTrace:</strong><pre>{ex.StackTrace}</pre>" +
-                    $"<br/><strong>Inner Exception:</strong> {ex.InnerException?.Message ?? "None"}",
-                    "text/html"
-                );
-            }
+
+            // Store current filter values in session
+            HttpContext.Session.SetFilterValues(vm);
+
+            // Get all clubs and categories for dropdowns
+            vm.Clubs = _context.Clubs.ToList();
+            vm.Categories = _context.ClassCategories.ToList();
+
+            // Build query with filters
+            var query = _context.Equinoxclasses
+                .Include(c => c.Club)
+                .Include(c => c.ClassCategory)
+                .Include(c => c.Coach)
+                .AsQueryable();
+
+            if (vm.ClubId != 0)
+                query = query.Where(c => c.ClubId == vm.ClubId);
+
+            if (vm.CategoryId != 0)
+                query = query.Where(c => c.ClassCategoryId == vm.CategoryId);
+
+            // Get filtered classes
+            vm.Classes = query.ToList();
+
+            // Get booked class IDs for display purposes
+            vm.BookedClassIds = CookieHelper.GetBookedClassIds(Request);
+
+            return View(vm);
         }
 
         public IActionResult Clear()
