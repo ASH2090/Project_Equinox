@@ -8,12 +8,6 @@ namespace Project_Equinox.Controllers
     {
         private readonly EquinoxContext _context;
 
-        // Constants to avoid duplicate message strings
-        private const string BookingSuccessMessage = "Class booked successfully!";
-        private const string BookingExistsMessage = "Class is already booked.";
-        private const string CancelSuccessMessage = "Booking canceled successfully!";
-        private const string BookingNotFoundMessage = "Booking not found.";
-
         public GymClassController(EquinoxContext context)
         {
             _context = context;
@@ -30,18 +24,17 @@ namespace Project_Equinox.Controllers
             }
 
             // Store current filter values in session
-            HttpContext.Session.SetFilterValues(vm);
+            HttpContext.Session.SaveFilterValues(vm);
 
             // Get all clubs and categories for dropdowns
             vm.Clubs = _context.Clubs.ToList();
             vm.Categories = _context.ClassCategories.ToList();
 
             // Build query with filters
-            var query = _context.Equinoxclasses
+            IQueryable<EquinoxClass> query = _context.Equinoxclasses
                 .Include(c => c.Club)
                 .Include(c => c.ClassCategory)
-                .Include(c => c.Coach)
-                .AsQueryable();
+                .Include(c => c.Coach);
 
             if (vm.ClubId != 0)
                 query = query.Where(c => c.ClubId == vm.ClubId);
@@ -53,63 +46,58 @@ namespace Project_Equinox.Controllers
             vm.Classes = query.ToList();
 
             // Get booked class IDs for display purposes
-            vm.BookedClassIds = CookieHelper.GetBookedClassIds(Request);
+            vm.BookedClassIds = EquinoxCookie.GetBookedClasses(Request);
 
             return View(vm);
         }
 
         public IActionResult Clear()
         {
-            HttpContext.Session.ClearFilterValues();
+            HttpContext.Session.ClearAllFilters();
             return RedirectToAction("Index");
         }
 
         public IActionResult Detail(int id)
         {
-            var query = _context.Equinoxclasses
+            var equinoxClass = _context.Equinoxclasses
                 .Include(c => c.Club)
-                .Include(c => c.ClassCategory);
-
-            var equinoxClass = query.FirstOrDefault(c => c.EquinoxClassId == id);
+                .Include(c => c.ClassCategory)
+                .Include(c => c.Coach)
+                .FirstOrDefault(c => c.EquinoxClassId == id);
 
             if (equinoxClass == null)
             {
                 return NotFound();
             }
 
-            var bookedIds = CookieHelper.GetBookedClassIds(Request);
-            ViewBag.IsBooked = bookedIds.Contains(id);
+            ViewBag.IsBooked = EquinoxCookie.IsClassBooked(Request, id);
 
             return View(equinoxClass);
         }
 
         public IActionResult Book(int id)
         {
-            var bookedIds = CookieHelper.GetBookedClassIds(Request);
-
-            if (!bookedIds.Contains(id))
+            if (EquinoxCookie.IsClassBooked(Request, id))
             {
-                bookedIds.Add(id);
-                TempData["Message"] = BookingSuccessMessage;
+                TempData["Message"] = "Class is already booked.";
             }
             else
             {
-                TempData["Message"] = BookingExistsMessage;
+                EquinoxCookie.SaveBooking(Response, id);
+                TempData["Message"] = "Class booked successfully!";
             }
 
-            CookieHelper.SetBookedClassIds(Response, bookedIds);
             return RedirectToAction("Index");
         }
 
         public IActionResult MyBookings()
         {
-            var bookedIds = CookieHelper.GetBookedClassIds(Request);
+            var bookedIds = EquinoxCookie.GetBookedClasses(Request);
 
-            var query = _context.Equinoxclasses
+            var bookedClasses = _context.Equinoxclasses
                 .Include(c => c.Club)
-                .Include(c => c.ClassCategory);
-
-            var bookedClasses = query
+                .Include(c => c.ClassCategory)
+                .Include(c => c.Coach)
                 .Where(c => bookedIds.Contains(c.EquinoxClassId))
                 .ToList();
 
@@ -119,17 +107,14 @@ namespace Project_Equinox.Controllers
         [HttpPost]
         public IActionResult CancelBooking(int id)
         {
-            var bookedIds = CookieHelper.GetBookedClassIds(Request);
-
-            if (bookedIds.Contains(id))
+            if (EquinoxCookie.IsClassBooked(Request, id))
             {
-                bookedIds.Remove(id);
-                CookieHelper.SetBookedClassIds(Response, bookedIds);
-                TempData["Message"] = CancelSuccessMessage;
+                EquinoxCookie.RemoveBooking(Response, id);
+                TempData["Message"] = "Booking canceled successfully!";
             }
             else
             {
-                TempData["Message"] = BookingNotFoundMessage;
+                TempData["Message"] = "Booking not found.";
             }
 
             return RedirectToAction("MyBookings");
