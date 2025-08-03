@@ -1,0 +1,51 @@
+﻿@model List<Project_Equinox.Models.Club>
+@{
+    ViewData["Title"] = "My Clubs";
+}
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="fw-bold">@ViewData["Title"]</h2>
+        <a asp-controller="ManageClub" asp-action="Add" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Add New Club
+        </a>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="table-responsive shadow-sm">
+            <table class="table table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">Club Name</th>
+                        <th scope="col">Phone Number</th>
+                        <th scope="col" class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var club in Model)
+                    {
+                        <tr>
+                            <td>@club.Name</td>
+                            <td>@club.PhoneNumber</td>
+                            <td class="text-end">
+                                <a asp-controller="ManageClub" asp-action="Edit" asp-route-id="@club.ClubId" class="btn btn-sm btn-outline-primary me-2">
+                                    <i class="bi bi-pencil-square"></i> Edit
+                                </a>
+                                <a asp-controller="ManageClub" asp-action="Delete" asp-route-id="@club.ClubId" class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash"></i> Delete
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info text-center">
+            No clubs available. Click <strong>Add New Club</strong> to create one.
+        </div>
+    }
+</div>
