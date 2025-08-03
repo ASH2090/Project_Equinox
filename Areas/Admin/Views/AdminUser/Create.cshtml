@@ -1,0 +1,157 @@
+@model Project_Equinox.Models.User
+
+@{
+    ViewData["Title"] = "Create User";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="h2">
+                <i class="fas fa-user-plus text-success me-3"></i>Create New User
+            </h1>
+            <hr>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-user-plus me-2"></i>User Information
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" id="userForm">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Name" class="form-label"></label>
+                                <input asp-for="Name" class="form-control" placeholder="Enter full name" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Email" class="form-label"></label>
+                                <input asp-for="Email" class="form-control" placeholder="user@example.com" />
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="PhoneNumber" class="form-label"></label>
+                                <input asp-for="PhoneNumber" class="form-control" placeholder="XXX-XXX-XXXX" maxlength="12" />
+                                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                <div class="form-text">Format: XXX-XXX-XXXX</div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="DOB" class="form-label"></label>
+                                <input asp-for="DOB" class="form-control" type="date" id="dobInput" />
+                                <span asp-validation-for="DOB" class="text-danger"></span>
+                                <div class="form-text" id="ageDisplay"></div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input asp-for="IsCoach" class="form-check-input" />
+                                <label asp-for="IsCoach" class="form-check-label">
+                                    This user is a coach
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-1"></i>Back to List
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-save me-1"></i>Create User
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(document).ready(function() {
+            // Phone number formatting
+            $('#PhoneNumber').on('input', function() {
+                let value = this.value.replace(/\D/g, '');
+                if (value.length >= 6) {
+                    value = value.substring(0,3) + '-' + value.substring(3,6) + '-' + value.substring(6,10);
+                } else if (value.length >= 3) {
+                    value = value.substring(0,3) + '-' + value.substring(3,6);
+                }
+                this.value = value;
+            });
+
+            // DOB validation and age calculation
+            function validateAndDisplayAge() {
+                const dobInput = document.getElementById('dobInput');
+                const ageDisplay = document.getElementById('ageDisplay');
+                const dobValue = dobInput.value;
+                
+                if (dobValue) {
+                    const dob = new Date(dobValue);
+                    const today = new Date();
+                    
+                    let age = today.getFullYear() - dob.getFullYear();
+                    const monthDiff = today.getMonth() - dob.getMonth();
+                    
+                    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+                        age--;
+                    }
+                    
+                    // Age validation (8-80 years)
+                    if (age < 8 || age > 80) {
+                        ageDisplay.innerHTML = `<span class="text-danger">Age: ${age} years (Must be between 8 and 80 years)</span>`;
+                        dobInput.setCustomValidity('Age must be between 8 and 80 years');
+                    } else {
+                        ageDisplay.innerHTML = `<span class="text-success">Age: ${age} years</span>`;
+                        dobInput.setCustomValidity('');
+                    }
+                } else {
+                    ageDisplay.innerHTML = '';
+                    dobInput.setCustomValidity('');
+                }
+            }
+
+            // Set date constraints
+            const dobInput = document.getElementById('dobInput');
+            const today = new Date();
+            const maxDate = new Date(today.getFullYear() - 8, today.getMonth(), today.getDate());
+            const minDate = new Date(today.getFullYear() - 80, today.getMonth(), today.getDate());
+            
+            dobInput.max = maxDate.toISOString().split('T')[0];
+            dobInput.min = minDate.toISOString().split('T')[0];
+            
+            // Event listeners
+            dobInput.addEventListener('change', validateAndDisplayAge);
+            dobInput.addEventListener('input', validateAndDisplayAge);
+            
+            // Initial validation
+            validateAndDisplayAge();
+
+            // Form submission validation
+            $('#userForm').on('submit', function(e) {
+                const dobInput = document.getElementById('dobInput');
+                if (!dobInput.checkValidity()) {
+                    e.preventDefault();
+                    dobInput.reportValidity();
+                    return false;
+                }
+            });
+        });
+    </script>
+}
