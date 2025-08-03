@@ -5,7 +5,9 @@
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" asp-area="Admin" asp-controller="Home" asp-action="Index">Equinox Admin</a>
+            <a class="navbar-brand" asp-area="Admin" asp-controller="Home" asp-action="Index">
+                <i class="fas fa-dumbbell me-2"></i>Equinox Admin
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNavbar" aria-controls="adminNavbar" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -18,6 +20,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Site</a> <!-- "Site" link returns to main client site home -->
+
                     </li>
                 </ul>
             </div>
@@ -25,6 +28,10 @@
     </nav>
 </header>
 
-<main class="container mt-4">
+<main class="container-fluid py-4">
     @RenderBody()
 </main>
+
+@section Scripts {
+    @await RenderSectionAsync("Scripts", required: false)
+}
