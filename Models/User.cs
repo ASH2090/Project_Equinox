@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
-using Project_Equinox.Models.Validation;
 
 namespace Project_Equinox.Models
 {
@@ -28,7 +27,7 @@ namespace Project_Equinox.Models
         [Required(ErrorMessage = "Date of birth is required.")]
         [Display(Name = "Date of Birth")]
         [DataType(DataType.Date)]
-        [AgeRange(8, 80)]
+        [MinimumAge(8, 80)]
         public DateTime DOB { get; set; }
 
         [Display(Name = "Is Coach")]

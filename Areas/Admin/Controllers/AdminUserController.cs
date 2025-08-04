@@ -24,6 +24,7 @@ namespace Equinox.Areas.Admin.Controllers
         [Route("Edit/{id?}")]
         public IActionResult Edit(int? id)
         {
+            User? model;
             if (id == null)
             {
                 model = new User();
@@ -57,7 +58,7 @@ namespace Equinox.Areas.Admin.Controllers
                 _context.Users.Update(user);
             }
             _context.SaveChanges();
-            return RedirectToAction(Index);
+            return RedirectToAction(nameof(Index));
         }
         [Route("Delete/{id?}")]
         public IActionResult Delete(int? id)
@@ -70,7 +71,7 @@ namespace Equinox.Areas.Admin.Controllers
 
             _context.Users.Remove(user);
             _context.SaveChanges();
-            return RedirectToAction(Index);
+            return RedirectToAction(nameof(Index));
         }
         [AcceptVerbs("GET", "POST")]
         [Route("VerifyPhone")]
