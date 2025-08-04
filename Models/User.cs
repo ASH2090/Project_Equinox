@@ -9,8 +9,9 @@ namespace Project_Equinox.Models
     {
         public int UserId { get; set; }
 
-        [Required(ErrorMessage = "Name is required.")]
-        [StringLength(100, MinimumLength = 2, ErrorMessage = "Name must be between 2 and 100 characters.")]
+        [Required(ErrorMessage = "User name is required.")]
+        [StringLength(50, ErrorMessage = "Name cannot exceed 50 characters.")]
+        [RegularExpression(@"^[a-zA-Z0-9\s]+$", ErrorMessage = "Alphanumeric only.")]
         public string Name { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Phone number is required.")]
