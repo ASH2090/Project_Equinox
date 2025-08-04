@@ -1,4 +1,4 @@
-@model User
+@model Project_Equinox.Models.User
 @{
     ViewData["Title"] = Model.UserId == 0 ? "Add User" : "Edit User";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
@@ -8,9 +8,11 @@
     <div class="col-md-8">
         <h2>@ViewData["Title"]</h2>
  
-        @if (TempData["Error"] != null)
+        @if (TempData["ValidationError"] != null)
         {
-            <div class="alert alert-danger">@TempData["Error"]</div>
+            <div class="alert alert-danger">
+                <i class="fas fa-exclamation-triangle me-2"></i>@TempData["ValidationError"]
+            </div>
         }
  
         <form asp-action="Edit" method="post">

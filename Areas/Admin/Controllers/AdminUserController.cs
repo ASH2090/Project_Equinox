@@ -24,30 +24,43 @@ namespace Equinox.Areas.Admin.Controllers
         [Route("Edit/{id?}")]
         public IActionResult Edit(int? id)
         {
-            User? model;
+            User model;
             if (id == null)
             {
                 model = new User();
             }
             else
             {
-                model = _context.Users.Find(id);
-                if (model == null)
+                var foundUser = _context.Users.Find(id);
+                if (foundUser == null)
                 {
                     return NotFound();
                 }
+                model = foundUser;
             }
             return View(model);
         }
         [HttpPost]
         [Route("Edit")]
+        [Route("Edit/{id?}")]
         public IActionResult Edit(User user)
         {
+            // Server-side validation: Check for duplicate phone number
+            var phoneExists = _context.Users.Any(u => u.PhoneNumber == user.PhoneNumber && u.UserId != user.UserId);
+            if (phoneExists)
+            {
+                ModelState.AddModelError("PhoneNumber", "This phone number is already registered.");
+            }
+
             if (!ModelState.IsValid)
             {
-                TempData["Error"] = "Please fix the errors.";
+                // Use TempData to coordinate with client-side validation
+                TempData["ValidationError"] = "Please correct the errors below and try again.";
                 return View(user);
             }
+
+            // Clear any previous validation messages on successful validation
+            TempData.Remove("ValidationError");
 
             if (user.UserId == 0)
             {

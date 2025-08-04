@@ -15,8 +15,8 @@ namespace Project_Equinox.Models
 
         [Required(ErrorMessage = "Phone number is required.")]
         [Display(Name = "Phone Number")]
-        [Remote(action: "IsPhoneNumberAvailable", controller: "User", AdditionalFields = "UserId", ErrorMessage = "This phone number is already in use.")]
         [RegularExpression(@"^\d{3}-\d{3}-\d{4}$", ErrorMessage = "Phone number must be in format: XXX-XXX-XXXX")]
+        [Remote("VerifyPhone", "AdminUser", AdditionalFields = "UserId", ErrorMessage = "This phone number is already registered.")]
         public string PhoneNumber { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Email is required.")]

@@ -1,17 +1,19 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
- 
-public class MinimumAgeAttribute : ValidationAttribute, IClientModelValidator
+
+namespace Project_Equinox.Models
 {
-    public int Years { get; }
-    public int? MaxYears { get; }
- 
-    public MinimumAgeAttribute(int years, int maxYears = 80)
+    public class MinimumAgeAttribute : ValidationAttribute, IClientModelValidator
     {
-        Years = years;
-        MaxYears = maxYears;
-    }
+        public int Years { get; }
+        public int? MaxYears { get; }
+ 
+        public MinimumAgeAttribute(int years, int maxYears = 80)
+        {
+            Years = years;
+            MaxYears = maxYears;
+        }
  
     protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
     {
@@ -45,5 +47,6 @@ public class MinimumAgeAttribute : ValidationAttribute, IClientModelValidator
         attributes.Add(key, value);
         return true;
     }
+}
 }
  

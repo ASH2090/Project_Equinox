@@ -31,21 +31,37 @@ namespace Project_Equinox.Areas.Admin.Controllers
         }
         else
         {
-            model = _context.Clubs.Find(id)!;
-            if (model == null) return NotFound();
+            var foundClub = _context.Clubs.Find(id);
+            if (foundClub == null)
+            {
+                return NotFound();
+            }
+            model = foundClub;
         }
         return View(model);
     }
 
     [HttpPost]
     [Route("Edit")]
+    [Route("Edit/{id?}")]
     public IActionResult Edit(Club club)
     {
+        // Server-side validation: Check for duplicate phone number
+        var phoneExists = _context.Clubs.Any(c => c.PhoneNumber == club.PhoneNumber && c.ClubId != club.ClubId);
+        if (phoneExists)
+        {
+            ModelState.AddModelError("PhoneNumber", "This phone number is already registered.");
+        }
+
         if (!ModelState.IsValid)
         {
-            TempData["Error"] = "Please fix the error";
+            // Use TempData to coordinate with client-side validation
+            TempData["ValidationError"] = "Please correct the errors below and try again.";
             return View(club);
         }
+
+        // Clear any previous validation messages on successful validation
+        TempData.Remove("ValidationError");
 
         if (club.ClubId == 0)
         {
@@ -56,7 +72,7 @@ namespace Project_Equinox.Areas.Admin.Controllers
             _context.Clubs.Update(club); // Edit
         }
         _context.SaveChanges();
-        return RedirectToAction("Index");
+        return RedirectToAction(nameof(Index));
     }
 
     [Route("Delete/{id}")]
@@ -66,14 +82,14 @@ namespace Project_Equinox.Areas.Admin.Controllers
         if (club == null) return NotFound();
         _context.Clubs.Remove(club);
         _context.SaveChanges();
-        return RedirectToAction("Index");
+        return RedirectToAction(nameof(Index));
     }
 
-    [AcceptVerbs("Get", "Post")]
+    [AcceptVerbs("GET", "POST")]
     [Route("VerifyClubPhone")]
-    public IActionResult VerifyClubPhone(string phoneNumber, int? id)
+    public IActionResult VerifyClubPhone(string phoneNumber, int clubId = 0)
     {
-        var exists = _context.Clubs.Any(c => c.PhoneNumber == phoneNumber && c.ClubId != id);
+        var exists = _context.Clubs.Any(c => c.PhoneNumber == phoneNumber && c.ClubId != clubId);
         return Json(!exists);
     }
 }

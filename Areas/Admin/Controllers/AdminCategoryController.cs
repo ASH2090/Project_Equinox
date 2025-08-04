@@ -29,32 +29,49 @@ namespace Project_Equinox.Areas.Admin.Controllers
         }
         else
         {
-            model = _context.ClassCategories.Find(id)!;
-            if (model == null) return NotFound();
+            var foundCategory = _context.ClassCategories.Find(id);
+            if (foundCategory == null)
+            {
+                return NotFound();
+            }
+            model = foundCategory;
         }
         return View(model);
     }
 
     [HttpPost]
     [Route("Edit")]
+    [Route("Edit/{id?}")]
     public IActionResult Edit(ClassCategory category)
     {
+        // Server-side validation: Check for duplicate category name
+        var nameExists = _context.ClassCategories.Any(c => c.Name == category.Name && c.ClassCategoryId != category.ClassCategoryId);
+        if (nameExists)
+        {
+            ModelState.AddModelError("Name", "A category with this name already exists.");
+        }
+
         if (!ModelState.IsValid)
         {
-            TempData["Error"] = "Please fix the error";
+            // Use TempData to coordinate with client-side validation
+            TempData["ValidationError"] = "Please correct the errors below and try again.";
             return View(category);
         }
 
+        // Clear any previous validation messages on successful validation
+        TempData.Remove("ValidationError");
+
         if (category.ClassCategoryId == 0)
         {
-            _context.ClassCategories.Add(category); // Create
+            _context.ClassCategories.Add(category);
         }
         else
         {
-            _context.ClassCategories.Update(category); // Edit
+            _context.ClassCategories.Update(category);
         }
+        
         _context.SaveChanges();
-        return RedirectToAction("Index");
+        return RedirectToAction(nameof(Index));
     }
 
     [Route("Delete/{id}")]
@@ -64,7 +81,7 @@ namespace Project_Equinox.Areas.Admin.Controllers
         if (cat == null) return NotFound();
         _context.ClassCategories.Remove(cat);
         _context.SaveChanges();
-        return RedirectToAction("Index");
+        return RedirectToAction(nameof(Index));
     }
 }
 }
