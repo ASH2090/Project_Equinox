@@ -28,7 +28,8 @@ namespace Project_Equinox.Models
         [Required(ErrorMessage = "Date of birth is required.")]
         [Display(Name = "Date of Birth")]
         [DataType(DataType.Date)]
-        [MinimumAge(8, 80)]
+        [Range(typeof(DateTime), "1/1/1944", "1/1/2017", ErrorMessage = "Age must be between 8 and 80 years.")]
+        [MinimumAge(8, 80)] // Keep for precise server-side validation
         public DateTime DOB { get; set; }
 
         [Display(Name = "Is Coach")]
