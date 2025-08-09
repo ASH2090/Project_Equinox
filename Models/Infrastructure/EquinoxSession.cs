@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Http;
 using System.Text.Json;
 
-namespace Project_Equinox.Models
+using Project_Equinox.Models.ViewModels;
+namespace Project_Equinox.Models.Infrastructure
 {
     public static class EquinoxSession
     {

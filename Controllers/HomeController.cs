@@ -1,6 +1,6 @@
  using Microsoft.AspNetCore.Mvc;
 
-namespace Equinox.Controllers
+namespace Project_Equinox.Controllers
 {
     public class HomeController : Controller
     {

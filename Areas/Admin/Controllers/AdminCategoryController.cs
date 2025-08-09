@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Project_Equinox.Models;
+using Project_Equinox.Models.DomainModels;
+using Project_Equinox.Models.Infrastructure;
 
 namespace Project_Equinox.Areas.Admin.Controllers
 {

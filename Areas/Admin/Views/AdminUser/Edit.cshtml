@@ -1,4 +1,5 @@
-@model Project_Equinox.Models.User
+@using Project_Equinox.Models.DomainModels
+@model User
 @{
     ViewData["Title"] = Model.UserId == 0 ? "Add User" : "Edit User";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";

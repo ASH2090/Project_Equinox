@@ -1,7 +1,6 @@
-
 using System.ComponentModel.DataAnnotations;
 
-namespace Project_Equinox.Models
+namespace Project_Equinox.Models.DomainModels
 {
     public class EquinoxClass
     {
@@ -14,7 +13,6 @@ namespace Project_Equinox.Models
         public string ClassDay { get; set; } = string.Empty;
         public string Time { get; set; } = string.Empty;
 
-        // PHASE 2: Foreign keys and navigation properties for filtering and details
         public int ClassCategoryId { get; set; }
         public ClassCategory? ClassCategory { get; set; }
 

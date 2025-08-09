@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Project_Equinox.Models;
+using Project_Equinox.Models.DomainModels;
+using Project_Equinox.Models.Infrastructure;
 using System.Linq;
 
 namespace Project_Equinox.Areas.Admin.Controllers

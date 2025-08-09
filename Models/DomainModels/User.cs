@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Mvc;
 
-namespace Project_Equinox.Models
+using Microsoft.AspNetCore.Mvc;
+using Project_Equinox.Models.Util;
+
+namespace Project_Equinox.Models.DomainModels
 {
     public class User
     {
@@ -29,13 +31,12 @@ namespace Project_Equinox.Models
         [Display(Name = "Date of Birth")]
         [DataType(DataType.Date)]
         [Range(typeof(DateTime), "1/1/1944", "1/1/2017", ErrorMessage = "Age must be between 8 and 80 years.")]
-        [MinimumAge(8, 80)] // Keep for precise server-side validation
+        [MinimumAge(8, 80)]
         public DateTime DOB { get; set; }
 
         [Display(Name = "Is Coach")]
         public bool IsCoach { get; set; }
 
-        // Navigation property: One coach can teach many classes
         public ICollection<EquinoxClass>? Classes { get; set; }
     }
 }
