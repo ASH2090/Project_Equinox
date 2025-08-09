@@ -1,97 +1,123 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Project_Equinox.Models.DomainModels;
-using Project_Equinox.Models.Infrastructure;
+using Project_Equinox.Models.Data.Repository;
+using Project_Equinox.Models.Util;
 using System.Linq;
-
+ 
 namespace Project_Equinox.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Route("Admin/Club")]
     public class AdminClubController : Controller
-{
-    private readonly EquinoxContext _context;
-
-    public AdminClubController(EquinoxContext context)
     {
-        _context = context;
-    }
-
-    [Route("")]
-    [Route("Index")]
-    public IActionResult Index() => View(_context.Clubs.ToList());
-
-    [Route("Edit")]
-    [Route("Edit/{id?}")]
-    public IActionResult Edit(int? id)
-    {
-        Club model;
-        if (id == null)
+        private readonly IEquinoxRepository _repository;
+ 
+        public AdminClubController(IEquinoxRepository repository)
         {
-            model = new Club();
+            _repository = repository;
         }
-        else
+ 
+        [Route("Admin/Club")]
+        [Route("Admin/Club/Index")]
+        public IActionResult Index()
         {
-            var foundClub = _context.Clubs.Find(id);
-            if (foundClub == null)
+            var options = new QueryOptions<Club>();
+            var clubs = _repository.Clubs.List(options);
+            return View(clubs);
+        }
+ 
+        [Route("Admin/Club/Edit")]
+        [Route("Admin/Club/Edit/{id?}")]
+        public IActionResult Edit(int? id)
+        {
+            Club model;
+            if (id == null)
+            {
+                model = new Club();
+            }
+            else
+            {
+                model = _repository.Clubs.Get(id.Value);
+                if (model == null)
+                {
+                    return NotFound();
+                }
+            }
+            return View(model);
+        }
+ 
+        [HttpPost]
+        [Route("Admin/Club/Edit")]
+        [Route("Admin/Club/Edit/{id?}")]
+        public IActionResult Edit(Club club)
+        {
+            // Server-side validation: Check for duplicate phone number
+            var phoneOptions = new QueryOptions<Club>()
+                .Filter(c => c.PhoneNumber == club.PhoneNumber && c.ClubId != club.ClubId);
+            var existingClubs = _repository.Clubs.List(phoneOptions);
+           
+            if (existingClubs.Any())
+            {
+                ModelState.AddModelError("PhoneNumber", "This phone number is already registered.");
+            }
+ 
+            if (!ModelState.IsValid)
+            {
+                TempData["ValidationError"] = "Please correct the errors below and try again.";
+                return View(club);
+            }
+ 
+            TempData.Remove("ValidationError");
+ 
+            if (club.ClubId == 0)
+            {
+                _repository.Clubs.Add(club);
+            }
+            else
+            {
+                _repository.Clubs.Update(club);
+            }
+            _repository.Save();
+            return RedirectToAction(nameof(Index));
+        }
+ 
+        [Route("Admin/Club/Delete/{id?}")]
+        public IActionResult Delete(int? id)
+        {
+            if (id == null)
             {
                 return NotFound();
             }
-            model = foundClub;
+ 
+            // Business rule: Check if club can be deleted
+            var canDelete = _repository.CanDeleteClub(id.Value);
+            if (!canDelete)
+            {
+                TempData["ErrorMessage"] = "Cannot delete this club as it has classes with existing bookings.";
+                return RedirectToAction(nameof(Index));
+            }
+ 
+            var club = _repository.Clubs.Get(id.Value);
+            if (club == null)
+            {
+                return NotFound();
+            }
+ 
+            _repository.Clubs.Delete(club);
+            _repository.Save();
+            return RedirectToAction(nameof(Index));
         }
-        return View(model);
-    }
-
-    [HttpPost]
-    [Route("Edit")]
-    [Route("Edit/{id?}")]
-    public IActionResult Edit(Club club)
-    {
-        // Server-side validation: Check for duplicate phone number
-        var phoneExists = _context.Clubs.Any(c => c.PhoneNumber == club.PhoneNumber && c.ClubId != club.ClubId);
-        if (phoneExists)
+ 
+        [AcceptVerbs("GET", "POST")]
+        [Route("VerifyClubPhone")]
+        public IActionResult VerifyClubPhone(string phoneNumber, int clubId = 0)
         {
-            ModelState.AddModelError("PhoneNumber", "This phone number is already registered.");
+            var options = new QueryOptions<Club>()
+                .Filter(c => c.PhoneNumber == phoneNumber && c.ClubId != clubId);
+            var existingClubs = _repository.Clubs.List(options);
+            return Json(!existingClubs.Any());
         }
-
-        if (!ModelState.IsValid)
-        {
-            // Use TempData to coordinate with client-side validation
-            TempData["ValidationError"] = "Please correct the errors below and try again.";
-            return View(club);
-        }
-
-        // Clear any previous validation messages on successful validation
-        TempData.Remove("ValidationError");
-
-        if (club.ClubId == 0)
-        {
-            _context.Clubs.Add(club); // Create
-        }
-        else
-        {
-            _context.Clubs.Update(club); // Edit
-        }
-        _context.SaveChanges();
-        return RedirectToAction(nameof(Index));
-    }
-
-    [Route("Delete/{id}")]
-    public IActionResult Delete(int id)
-    {
-        var club = _context.Clubs.Find(id);
-        if (club == null) return NotFound();
-        _context.Clubs.Remove(club);
-        _context.SaveChanges();
-        return RedirectToAction(nameof(Index));
-    }
-
-    [AcceptVerbs("GET", "POST")]
-    [Route("VerifyClubPhone")]
-    public IActionResult VerifyClubPhone(string phoneNumber, int clubId = 0)
-    {
-        var exists = _context.Clubs.Any(c => c.PhoneNumber == phoneNumber && c.ClubId != clubId);
-        return Json(!exists);
     }
 }
-}
+ 
+ 
