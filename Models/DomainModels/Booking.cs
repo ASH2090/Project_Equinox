@@ -1,4 +1,4 @@
-namespace Project_Equinox.Models
+namespace Project_Equinox.Models.DomainModels
 {
     public class Booking
     {

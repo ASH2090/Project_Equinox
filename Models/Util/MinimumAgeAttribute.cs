@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
-namespace Project_Equinox.Models
+namespace Project_Equinox.Models.Util
 {
     public class MinimumAgeAttribute : ValidationAttribute, IClientModelValidator
     {

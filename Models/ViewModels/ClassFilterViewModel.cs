@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace Project_Equinox.Models
+using Project_Equinox.Models.DomainModels;
+namespace Project_Equinox.Models.ViewModels
 {
     public class ClassFilterViewModel
     {

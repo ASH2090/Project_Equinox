@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Project_Equinox.Models
+namespace Project_Equinox.Models.DomainModels
 {
     public class Club
     {

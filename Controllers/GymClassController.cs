@@ -1,17 +1,23 @@
+
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Project_Equinox.Models;
+using Project_Equinox.Models.Data.Repository;
+using Project_Equinox.Models.ViewModels;
+using Project_Equinox.Models.Infrastructure;
+using Project_Equinox.Models.DomainModels;
+using Project_Equinox.Models.Util;
 
 namespace Project_Equinox.Controllers
 {
+
     public class GymClassController : Controller
     {
-        private readonly EquinoxContext _context;
+        private readonly IEquinoxRepository _repository;
 
-        public GymClassController(EquinoxContext context)
+        public GymClassController(IEquinoxRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
+
 
         public IActionResult Index(ClassFilterViewModel vm)
         {
@@ -27,29 +33,34 @@ namespace Project_Equinox.Controllers
             HttpContext.Session.SaveFilterValues(vm);
 
             // Get all clubs and categories for dropdowns
-            vm.Clubs = _context.Clubs.ToList();
-            vm.Categories = _context.ClassCategories.ToList();
+            vm.Clubs = _repository.Clubs.List(new QueryOptions<Club>()).ToList();
+            vm.Categories = _repository.ClassCategories.List(new QueryOptions<ClassCategory>()).ToList();
 
-            // Build query with filters
-            IQueryable<EquinoxClass> query = _context.Equinoxclasses
-                .Include(c => c.Club)
-                .Include(c => c.ClassCategory)
-                .Include(c => c.Coach);
+            // Build query options for EquinoxClass
+            var options = new QueryOptions<EquinoxClass>
+            {
+                Includes = "Club,ClassCategory,Coach"
+            };
 
-            if (vm.ClubId != 0)
-                query = query.Where(c => c.ClubId == vm.ClubId);
+            // Filtering
+            if (vm.ClubId != 0 && vm.CategoryId != 0)
+            {
+                options.Where = c => c.ClubId == vm.ClubId && c.ClassCategoryId == vm.CategoryId;
+            }
+            else if (vm.ClubId != 0)
+            {
+                options.Where = c => c.ClubId == vm.ClubId;
+            }
+            else if (vm.CategoryId != 0)
+            {
+                options.Where = c => c.ClassCategoryId == vm.CategoryId;
+            }
 
-            if (vm.CategoryId != 0)
-                query = query.Where(c => c.ClassCategoryId == vm.CategoryId);
-
-            // Get filtered classes
-            vm.Classes = query.ToList();
-
-            // Get booked class IDs for display purposes
+            vm.Classes = _repository.EquinoxClasses.List(options).ToList();
             vm.BookedClassIds = EquinoxCookie.GetBookedClasses(Request);
-
             return View(vm);
         }
+
 
         public IActionResult Clear()
         {
@@ -57,23 +68,23 @@ namespace Project_Equinox.Controllers
             return RedirectToAction("Index");
         }
 
+
         public IActionResult Detail(int id)
         {
-            var equinoxClass = _context.Equinoxclasses
-                .Include(c => c.Club)
-                .Include(c => c.ClassCategory)
-                .Include(c => c.Coach)
-                .FirstOrDefault(c => c.EquinoxClassId == id);
-
+            var options = new QueryOptions<EquinoxClass>
+            {
+                Includes = "Club,ClassCategory,Coach",
+                Where = c => c.EquinoxClassId == id
+            };
+            var equinoxClass = _repository.EquinoxClasses.Get(options);
             if (equinoxClass == null)
             {
                 return NotFound();
             }
-
             ViewBag.IsBooked = EquinoxCookie.IsClassBooked(Request, id);
-
             return View(equinoxClass);
         }
+
 
         public IActionResult Book(int id)
         {
@@ -86,23 +97,22 @@ namespace Project_Equinox.Controllers
                 EquinoxCookie.SaveBooking(Response, id);
                 TempData["Message"] = "Class booked successfully!";
             }
-
             return RedirectToAction("Index");
         }
+
 
         public IActionResult MyBookings()
         {
             var bookedIds = EquinoxCookie.GetBookedClasses(Request);
-
-            var bookedClasses = _context.Equinoxclasses
-                .Include(c => c.Club)
-                .Include(c => c.ClassCategory)
-                .Include(c => c.Coach)
-                .Where(c => bookedIds.Contains(c.EquinoxClassId))
-                .ToList();
-
+            var options = new QueryOptions<EquinoxClass>
+            {
+                Includes = "Club,ClassCategory,Coach",
+                Where = c => bookedIds.Contains(c.EquinoxClassId)
+            };
+            var bookedClasses = _repository.EquinoxClasses.List(options).ToList();
             return View(bookedClasses);
         }
+
 
         [HttpPost]
         public IActionResult CancelBooking(int id)
@@ -116,7 +126,6 @@ namespace Project_Equinox.Controllers
             {
                 TempData["Message"] = "Booking not found.";
             }
-
             return RedirectToAction("MyBookings");
         }
     }

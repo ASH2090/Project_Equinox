@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace Project_Equinox.Models
+using Project_Equinox.Models.DomainModels;
+namespace Project_Equinox.Models.Infrastructure
 {
     public class EquinoxContext : DbContext
     {

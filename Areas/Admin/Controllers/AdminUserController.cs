@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Project_Equinox.Models;
+using Project_Equinox.Models.DomainModels;
+using Project_Equinox.Models.Infrastructure;
 
 namespace Equinox.Areas.Admin.Controllers
 {
