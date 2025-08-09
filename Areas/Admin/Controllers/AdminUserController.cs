@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Project_Equinox.Models.DomainModels;
 using Project_Equinox.Models.Infrastructure;
-
+ 
 namespace Equinox.Areas.Admin.Controllers
 {
     [Area("Admin")]
@@ -11,17 +11,17 @@ namespace Equinox.Areas.Admin.Controllers
     public class AdminUserController : Controller
     {
         private readonly EquinoxContext _context;
-
+ 
         public AdminUserController(EquinoxContext context)
         {
             _context = context;
         }
-
+ 
         // GET: Admin/User
         [Route("")]
         [Route("Index")]
         public IActionResult Index() => View(_context.Users.ToList());
-
+ 
         [Route("Edit")]
         [Route("Edit/{id?}")]
         public IActionResult Edit(int? id)
@@ -42,7 +42,7 @@ namespace Equinox.Areas.Admin.Controllers
             }
             return View(model);
         }
-
+ 
         [HttpPost]
         [Route("Edit")]
         [Route("Edit/{id?}")]
@@ -54,17 +54,17 @@ namespace Equinox.Areas.Admin.Controllers
             {
                 ModelState.AddModelError("PhoneNumber", "This phone number is already registered.");
             }
-
+ 
             if (!ModelState.IsValid)
             {
                 // Use TempData to coordinate with client-side validation
                 TempData["ValidationError"] = "Please correct the errors below and try again.";
                 return View(user);
             }
-
+ 
             // Clear any previous validation messages on successful validation
             TempData.Remove("ValidationError");
-
+ 
             if (user.UserId == 0)
             {
                 _context.Users.Add(user);
@@ -76,7 +76,7 @@ namespace Equinox.Areas.Admin.Controllers
             _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
-
+ 
         [Route("Delete/{id?}")]
         public IActionResult Delete(int? id)
         {
@@ -85,12 +85,12 @@ namespace Equinox.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-
+ 
             _context.Users.Remove(user);
             _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
-
+ 
         [AcceptVerbs("GET", "POST")]
         [Route("VerifyPhone")]
         public IActionResult VerifyPhone(string phoneNumber, int userId = 0)
