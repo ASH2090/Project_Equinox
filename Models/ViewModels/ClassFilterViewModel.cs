@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
-
 using Project_Equinox.Models.DomainModels;
+
 namespace Project_Equinox.Models.ViewModels
 {
     public class ClassFilterViewModel
@@ -16,6 +16,7 @@ namespace Project_Equinox.Models.ViewModels
         {
             return BookedClassIds?.Contains(classId) ?? false;
         }
+        
         public class ClassDetailViewModel
         {
             public EquinoxClass Classes { get; set; } = new EquinoxClass();
@@ -23,9 +24,6 @@ namespace Project_Equinox.Models.ViewModels
             public int ClubId { get; set; }
             public int CategoryId { get; set; }
             public string returnUrl { get; set; } = string.Empty;
-            
         }
-
     }
-
 }
