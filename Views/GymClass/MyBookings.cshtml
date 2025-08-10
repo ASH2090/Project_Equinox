@@ -1,0 +1,130 @@
+@model List<EquinoxClass>
+
+@{
+    ViewData["Title"] = "My Bookings";
+    Layout = "_MainLayout";
+}
+
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="display-5">
+                    <i class="fas fa-calendar-check text-primary me-3"></i>My Bookings
+                </h1>
+                <a asp-action="Index" class="btn btn-outline-primary">
+                    <i class="fas fa-search me-1"></i>Find More Classes
+                </a>
+            </div>
+            <hr class="mb-4">
+        </div>
+    </div>
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Message"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (Model != null && Model.Count > 0)
+    {
+        <div class="row mb-3">
+            <div class="col-12">
+                <p class="lead">You have <strong>@Model.Count</strong> class(es) booked.</p>
+            </div>
+        </div>
+
+        <div class="row">
+            @foreach (var equinoxClass in Model)
+            {
+                <div class="col-lg-6 col-md-12 mb-4">
+                    <div class="card h-100 shadow-sm booking-card">
+                        <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">
+                                <i class="fas fa-check-circle me-2"></i>@equinoxClass.Name
+                            </h5>
+                            <span class="badge bg-light text-dark">Booked</span>
+                        </div>
+                        
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <p class="card-text mb-2">
+                                        <i class="fas fa-map-marker-alt text-primary me-2"></i>
+                                        <strong>Location:</strong> @equinoxClass.Club?.Name
+                                    </p>
+                                </div>
+                                <div class="col-12">
+                                    <p class="card-text mb-2">
+                                        <i class="fas fa-tag text-success me-2"></i>
+                                        <strong>Category:</strong> @equinoxClass.ClassCategory?.Name
+                                    </p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="card-text mb-2">
+                                        <i class="fas fa-calendar text-info me-2"></i>
+                                        <strong>Day:</strong> @equinoxClass.ClassDay
+                                    </p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="card-text mb-2">
+                                        <i class="fas fa-clock text-warning me-2"></i>
+                                        <strong>Time:</strong> @equinoxClass.Time
+                                    </p>
+                                </div>
+                                @if (equinoxClass.Coach != null)
+                                {
+                                    <div class="col-12">
+                                        <p class="card-text mb-0">
+                                            <i class="fas fa-user text-secondary me-2"></i>
+                                            <strong>Coach:</strong> @equinoxClass.Coach.Name
+                                        </p>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        
+                        <div class="card-footer bg-light">
+                            <div class="d-flex gap-2 justify-content-between">
+                                <a asp-action="Detail" asp-route-id="@equinoxClass.EquinoxClassId" 
+                                   class="btn btn-outline-info">
+                                    <i class="fas fa-info-circle me-1"></i>View Details
+                                </a>
+                                
+                                <form asp-action="CancelBooking" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@equinoxClass.EquinoxClassId" />
+                                    <button type="submit" class="btn btn-outline-danger" 
+                                            onclick="return confirm('Are you sure you want to cancel this booking?')">
+                                        <i class="fas fa-times me-1"></i>Cancel Booking
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-12">
+                <div class="text-center py-5">
+                    <div class="card shadow-sm">
+                        <div class="card-body py-5">
+                            <i class="fas fa-calendar-times fa-5x text-muted mb-4"></i>
+                            <h3 class="text-muted mb-3">No Bookings Yet</h3>
+                            <p class="text-muted mb-4">You haven't booked any classes yet. Start exploring our classes to find the perfect fit for you!</p>
+                            <a asp-action="Index" class="btn btn-primary btn-lg">
+                                <i class="fas fa-search me-2"></i>Browse Classes
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

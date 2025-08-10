@@ -1,0 +1,94 @@
+@model EquinoxClass
+
+@{
+    ViewData["Title"] = Model.Name;
+    Layout = "_MainLayout";
+}
+
+<div class="detail-container">
+    <div class="detail-card">
+        @if (!string.IsNullOrEmpty(Model.ClassPicture))
+        {
+            <img src="@Model.ClassPicture" class="detail-image" alt="@Model.Name">
+        }
+        else
+        {
+            <div class="detail-image-placeholder">
+                <i class="fas fa-dumbbell fa-3x text-muted"></i>
+            </div>
+        }
+        
+        <div class="detail-header">
+            <h1 class="detail-title">@Model.Name</h1>
+        </div>
+        
+        <div class="detail-body">
+            <div class="detail-info-row">
+                <div class="detail-info-item">
+                    <div class="detail-info-label"><i class="fas fa-map-marker-alt me-1"></i>Location</div>
+                    <p class="detail-info-value">@Model.Club?.Name</p>
+                </div>
+                <div class="detail-info-item">
+                    <div class="detail-info-label"><i class="fas fa-tag me-1"></i>Category</div>
+                    <p class="detail-info-value">@Model.ClassCategory?.Name</p>
+                </div>
+            </div>
+            
+            <div class="detail-info-row">
+                <div class="detail-info-item">
+                    <div class="detail-info-label"><i class="fas fa-calendar me-1"></i>Schedule</div>
+                    <p class="detail-info-value">@Model.ClassDay</p>
+                </div>
+                <div class="detail-info-item">
+                    <div class="detail-info-label"><i class="fas fa-clock me-1"></i>Time</div>
+                    <p class="detail-info-value">@Model.Time</p>
+                </div>
+            </div>
+            
+            @if (Model.Coach != null)
+            {
+                <div class="detail-info-row">
+                    <div class="detail-info-item">
+                        <div class="detail-info-label"><i class="fas fa-user me-1"></i>Coach</div>
+                        <p class="detail-info-value">@Model.Coach.Name</p>
+                    </div>
+                </div>
+            }
+
+            @if (TempData["Message"] != null)
+            {
+                <div class="alert-clean">
+                    @TempData["Message"]
+                </div>
+            }
+        </div>
+        
+        <div class="detail-footer">
+            <a asp-action="Index" class="btn-clean">
+                <i class="fas fa-arrow-left me-1"></i>Back to Classes
+            </a>
+            
+            <div>
+                @if (ViewBag.IsBooked == true)
+                {
+                    <span class="status-badge">
+                        <i class="fas fa-check me-1"></i>Class Already Booked
+                    </span>
+                    <a asp-action="MyBookings" class="btn-clean">
+                        <i class="fas fa-list me-1"></i>My Bookings
+                    </a>
+                }
+                else
+                {
+                    <form asp-action="Book" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@Model.EquinoxClassId" />
+                        <button type="submit" class="btn-clean btn-primary-clean">
+                            <i class="fas fa-plus me-1"></i>Book This Class
+                        </button>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+</div>

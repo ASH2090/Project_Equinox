@@ -1,0 +1,54 @@
+﻿@{
+    ViewData["Title"] = "Admin Home";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="text-center mb-4">
+            <h2 class="display-4">Welcome, Admin!</h2>
+            <p class="lead">Manage your Equinox gym system from this dashboard</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 text-center">
+                    <div class="card-body">
+                        <i class="fas fa-dumbbell fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">Manage Clubs</h5>
+                        <p class="card-text">Add, edit, and manage gym club locations</p>
+                        <a href="/Admin/Club" class="btn btn-primary">
+                            <i class="fas fa-cog"></i> Manage Clubs
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100 text-center">
+                    <div class="card-body">
+                        <i class="fas fa-tags fa-3x text-success mb-3"></i>
+                        <h5 class="card-title">Class Categories</h5>
+                        <p class="card-text">Organize and manage class categories</p>
+                        <a href="/Admin/Category" class="btn btn-success">
+                            <i class="fas fa-list"></i> Manage Categories
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100 text-center">
+                    <div class="card-body">
+                        <i class="fas fa-users fa-3x text-info mb-3"></i>
+                        <h5 class="card-title">User Management</h5>
+                        <p class="card-text">Add and manage users and coaches</p>
+                        <a href="/Admin/User" class="btn btn-info">
+                            <i class="fas fa-user-cog"></i> Manage Users
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
