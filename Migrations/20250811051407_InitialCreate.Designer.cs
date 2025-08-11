@@ -11,7 +11,7 @@ using Project_Equinox.Models.Infrastructure;
 namespace Project_Equinox.Migrations
 {
     [DbContext(typeof(EquinoxContext))]
-    [Migration("20250810160027_InitialCreate")]
+    [Migration("20250811051407_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
