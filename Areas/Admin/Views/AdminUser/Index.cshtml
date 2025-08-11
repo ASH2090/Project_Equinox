@@ -37,7 +37,7 @@
                 <td>@user.Name</td>
                 <td>@user.Email</td>
                 <td>@user.PhoneNumber</td>
-                <td>@user.DOB.ToString("yyyy-MM-dd")</td>
+                <td>@(user.DOB.HasValue ? user.DOB.Value.ToString("yyyy-MM-dd") : "")</td>
                 <td>@(user.IsCoach ? "Yes" : "No")</td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@user.UserId" class="btn btn-sm btn-warning">Edit</a>

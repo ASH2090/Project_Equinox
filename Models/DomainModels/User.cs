@@ -31,7 +31,7 @@ namespace Project_Equinox.Models.DomainModels
     [Display(Name = "Date of Birth")]
     [DataType(DataType.Date)]
     [MinimumAge(8, 80)]
-    public DateTime DOB { get; set; }
+    public DateTime? DOB { get; set; }
 
         [Display(Name = "Is Coach")]
         public bool IsCoach { get; set; }

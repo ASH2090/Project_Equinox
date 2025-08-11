@@ -33,8 +33,18 @@ namespace Project_Equinox.Areas.Admin.Controllers
         [HttpGet("Edit/{id?}")]
         public IActionResult Edit(int? id)
         {
-            User? model = id == null ? new User() : _repository.Users.Get(id.Value);
-            if (id != null && model == null) return NotFound();
+            User? model;
+            if (id == null)
+            {
+                model = new User {
+                    DOB = null // Ensure DOB is null for new users
+                };
+            }
+            else
+            {
+                model = _repository.Users.Get(id.Value);
+                if (model == null) return NotFound();
+            }
             return View(model);
         }
 

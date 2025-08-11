@@ -40,7 +40,12 @@
            
             <div class="mb-3">
                 <label asp-for="DOB" class="form-label"></label>
-                <input asp-for="DOB" type="date" class="form-control" />
+                @{
+                    var today = DateTime.Today;
+                    var maxDate = today.AddYears(-8).ToString("yyyy-MM-dd");
+                    var minDate = today.AddYears(-80).ToString("yyyy-MM-dd");
+                }
+                <input asp-for="DOB" type="date" class="form-control" min="@minDate" max="@maxDate" />
                 <span asp-validation-for="DOB" class="text-danger"></span>
             </div>
            
