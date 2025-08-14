@@ -1,3 +1,4 @@
+    
 using Microsoft.EntityFrameworkCore;
 
 using Project_Equinox.Models.DomainModels;
@@ -13,6 +14,7 @@ namespace Project_Equinox.Models.Infrastructure
         public DbSet<ClassCategory> ClassCategories { get; set; } = null!;
         public DbSet<User> Users { get; set; } = null!;
         public DbSet<Booking> Bookings { get; set; } = null!;
+        public DbSet<Membership> Memberships { get; set; } = null!;
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Club>()
@@ -99,6 +101,13 @@ namespace Project_Equinox.Models.Infrastructure
                     ClubId = 2,
                     CoachId = 1
                 }
+                );
+
+            modelBuilder.Entity<Membership>()
+                .HasData(
+                    new Membership { MembershipId = 1, Name = "Annual", Price = 499.99 },
+                    new Membership { MembershipId = 2, Name = "Monthly", Price = 49.99 },
+                    new Membership { MembershipId = 3, Name = "Punch Card", Price = 99.99 }
                 );
 
         }

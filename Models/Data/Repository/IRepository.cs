@@ -3,11 +3,14 @@ using Project_Equinox.Models.Util;
 namespace Project_Equinox.Models.Data.Repository
 {
     public interface IRepository<T> where T : class
+    
     {
         T? Get(int id);
         T? Get(QueryOptions<T> options);
         IEnumerable<T> List(QueryOptions<T> options);
+         IEnumerable<T> ListAll();
         GridData<T> List(QueryOptions<T> options, bool returnGridData);
+       
         int Count();
         int Count(QueryOptions<T> options);
         

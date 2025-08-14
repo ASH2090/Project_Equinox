@@ -5,6 +5,7 @@ using Project_Equinox.Models.Infrastructure;
 namespace Project_Equinox.Models.Data.Repository
 {
     public class EquinoxRepository : IEquinoxRepository
+    
     {
         private readonly EquinoxContext _context;
         private readonly Dictionary<Type, object> _repositories;
@@ -20,6 +21,7 @@ namespace Project_Equinox.Models.Data.Repository
         public IRepository<User> Users => GetRepository<User>();
         public IRepository<EquinoxClass> EquinoxClasses => GetRepository<EquinoxClass>();
         public IRepository<Booking> Bookings => GetRepository<Booking>();
+        public IRepository<Membership> Memberships => GetRepository<Membership>();
 
         private IRepository<T> GetRepository<T>() where T : class
         {

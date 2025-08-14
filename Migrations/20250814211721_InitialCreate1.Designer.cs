@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Project_Equinox.Models.Infrastructure;
 
@@ -10,9 +11,11 @@ using Project_Equinox.Models.Infrastructure;
 namespace Project_Equinox.Migrations
 {
     [DbContext(typeof(EquinoxContext))]
-    partial class EquinoxContextModelSnapshot : ModelSnapshot
+    [Migration("20250814211721_InitialCreate1")]
+    partial class InitialCreate1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.7");

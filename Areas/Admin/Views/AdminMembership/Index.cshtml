@@ -1,0 +1,50 @@
+@using Project_Equinox.Models
+@model IEnumerable<Project_Equinox.Models.DomainModels.Membership>
+@{
+	ViewData["Title"] = "Memberships";
+}
+
+
+@{
+	Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (TempData["ErrorMessage"] is string err && !string.IsNullOrWhiteSpace(err))
+{
+	<div class="alert alert-danger alert-dismissible fade show" role="alert">
+		@err
+		<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+	</div>
+}
+
+<p>
+	<a asp-action="Edit" class="btn btn-primary">Add New Membership</a>
+</p>
+
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Price</th>
+			<th>Actions</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>@item.Name</td>
+				<td>@item.Price.ToString("C")</td>
+				<td>
+					<a asp-action="Edit" asp-route-id="@item.MembershipId" class="btn btn-sm btn-warning">Edit</a>
+					<form asp-action="Delete" asp-route-id="@item.MembershipId" method="post" style="display:inline">
+						@Html.AntiForgeryToken()
+						<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this membership?')">Delete</button>
+					</form>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>

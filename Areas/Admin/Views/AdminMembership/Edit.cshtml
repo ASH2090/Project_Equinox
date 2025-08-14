@@ -1,0 +1,58 @@
+
+@model Project_Equinox.Models.DomainModels.Membership
+@{
+	ViewData["Title"] = Model.MembershipId == 0 ? "Add Membership" : "Edit Membership";
+	Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+	<div class="col-md-6">
+		<h2>@ViewData["Title"]</h2>
+
+		@if (TempData["ValidationError"] != null)
+		{
+			<div class="alert alert-danger">
+				<i class="fas fa-exclamation-triangle me-2"></i>@TempData["ValidationError"]
+			</div>
+		}
+
+		<form asp-action="Edit" method="post">
+			<input type="hidden" asp-for="MembershipId" />
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+			<div class="mb-3">
+				<label asp-for="Name" class="form-label"></label>
+				<input asp-for="Name" class="form-control" />
+				<span asp-validation-for="Name" class="text-danger"></span>
+			</div>
+
+			<div class="mb-3">
+				<label asp-for="Price" class="form-label"></label>
+				<input asp-for="Price" class="form-control" />
+				<span asp-validation-for="Price" class="text-danger"></span>
+			</div>
+
+			<div class="mb-3">
+				<button type="submit" class="btn btn-primary">
+					@(Model.MembershipId == 0 ? "Add" : "Save Changes")
+				</button>
+				<a asp-action="Index" class="btn btn-secondary">Cancel</a>
+			</div>
+		</form>
+
+		@if (Model.MembershipId != 0)
+		{
+			<hr />
+			<h3>Delete Membership</h3>
+			<form asp-action="Delete" method="post">
+				<input type="hidden" asp-for="MembershipId" />
+				<button type="submit" class="btn btn-danger">Delete</button>
+				<a asp-action="Index" class="btn btn-secondary">Cancel</a>
+			</form>
+		}
+	</div>
+</div>
+
+@section Scripts {
+	@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

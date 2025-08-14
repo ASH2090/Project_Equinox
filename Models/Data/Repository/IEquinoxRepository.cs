@@ -3,6 +3,7 @@ using Project_Equinox.Models.DomainModels;
 namespace Project_Equinox.Models.Data.Repository
 {
     public interface IEquinoxRepository
+   
     {
         // Generic repository access
         IRepository<Club> Clubs { get; }
@@ -10,6 +11,7 @@ namespace Project_Equinox.Models.Data.Repository
         IRepository<User> Users { get; }
         IRepository<EquinoxClass> EquinoxClasses { get; }
         IRepository<Booking> Bookings { get; }
+         IRepository<Membership> Memberships { get; }
         
         // Business logic methods
         bool CanDeleteClub(int clubId);

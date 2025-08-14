@@ -6,6 +6,10 @@ namespace Project_Equinox.Models.Data.Repository
 {
     public class Repository<T> : IRepository<T> where T : class
     {
+        public IEnumerable<T> ListAll()
+        {
+            return _dbSet.ToList();
+        }
         protected readonly EquinoxContext _context;
         protected readonly DbSet<T> _dbSet;
 

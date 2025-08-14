@@ -11,7 +11,7 @@ using Project_Equinox.Models.Infrastructure;
 namespace Project_Equinox.Migrations
 {
     [DbContext(typeof(EquinoxContext))]
-    [Migration("20250811051407_InitialCreate")]
+    [Migration("20250814210036_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -253,6 +253,24 @@ namespace Project_Equinox.Migrations
                             Name = "Barre Basics",
                             Time = "9 AM – 10 AM"
                         });
+                });
+
+            modelBuilder.Entity("Project_Equinox.Models.DomainModels.Membership", b =>
+                {
+                    b.Property<int>("MembershipId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("REAL");
+
+                    b.HasKey("MembershipId");
+
+                    b.ToTable("Memberships");
                 });
 
             modelBuilder.Entity("Project_Equinox.Models.DomainModels.User", b =>

@@ -42,6 +42,20 @@ namespace Project_Equinox.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Memberships",
+                columns: table => new
+                {
+                    MembershipId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Price = table.Column<double>(type: "REAL", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Memberships", x => x.MembershipId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -190,6 +204,9 @@ namespace Project_Equinox.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Bookings");
+
+            migrationBuilder.DropTable(
+                name: "Memberships");
 
             migrationBuilder.DropTable(
                 name: "Equinoxclasses");
